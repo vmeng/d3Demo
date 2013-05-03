@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<style>
+     		 body{font-family: sans-serif}
+      	</style>
+      	<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="../js/radar/radar-chart-min.js"></script>
+	</head>
+	<body>
+		
+		<h1> Spider </h1><br/>
+		
+		<div id="chart" style='float:left'></div>
+<div style='float:left'>
+Code: <br/>
+<textarea id="chartValue" style="height:300;width: 300">[
+     [
+           {axis: "strength", value: 13}, 
+           {axis: "intelligence", value: 1}, 
+           {axis: "charisma", value: 8},  
+           {axis: "dexterity", value: 4},  
+           {axis: "luck", value: 9}
+      ],[
+           {axis: "strength", value: 3}, 
+           {axis: "intelligence", value: 15}, 
+           {axis: "charisma", value: 4}, 
+           {axis: "dexterity", value: 1},  
+           {axis: "luck", value: 15}
+      ],[
+           {axis: "strength", value: 5}, 
+           {axis: "intelligence", value: 1}, 
+           {axis: "charisma", value: 16}, 
+           {axis: "dexterity", value: 10},  
+           {axis: "luck", value: 5}
+     ]
+];</textarea>
+
+<div>change code and redraw</div>
+
+<button onclick="redraw()">Redraw</button>
+
+<script>
+// var text = document.getElementById('chartValue').innerHTML;
+// alert(text);	
+function redraw () {
+  // var dd = eval(d3.select("#chartValue").text());
+  var dd = eval(document.getElementById('chartValue').value);
+  RadarChart.draw("#chart", dd);
+}		
+
+redraw();
+    </script>
+	</body>
+</html>
