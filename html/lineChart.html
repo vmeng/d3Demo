@@ -59,6 +59,7 @@ function sinAndCos() {
 <script src="../js/nvd3/models/scatter.js"></script>
 <script src="../js/nvd3/models/line.js"></script>
 <script src="../js/nvd3/models/lineChart.js"></script>
+<script src="../js/pwcColors.js"></script>
 <script>
 
 var chart;
@@ -76,7 +77,8 @@ nv.addGraph(function() {
   chart.yAxis
       .axisLabel('Voltage (v)')
       .tickFormat(d3.format(',.2f'));
-
+  // chart.color(pwcColors);
+  
   d3.select('#chart1 svg')
       .attr('perserveAspectRatio', 'xMinYMid')
       .attr('width', width)
