@@ -132,4 +132,46 @@ var RadarChart = {
   },
 }
 
-
+//below chart is for xRadar
+var xRadarChart = {
+	chartTool: RadarChart,
+	names: [],
+	series_data: [],
+	show_data:[],
+	opt:{},
+	id:"",
+	draw: function(id, data, options){
+	   var legendHtm = '';
+	   xRadarChart.id = id;
+	   xRadarChart.opt = options;
+       xRadarChart.names = data.map(function(i, j){return {"name":i.name, "select": true}});
+       
+       xRadarChart.names.forEach(function(entry, index){
+       	var color = xRadarChart.opt.color(index);
+       	legendHtm = legendHtm + "<span style='cursor:pointer' onclick='xRadarChart.selectSeries("+index+", this)'> "
+       	+ "<div style='width:10px;height:10px;border-radius:10px;background-color:"+color+";border:2px solid "+color+";display: inline-block;'>&nbsp;</div>"
+       	+entry.name+"</span>&nbsp;"
+       })
+       d3.select(xRadarChart.id).append("div").style("text-align","right");
+       $(xRadarChart.id+ " div").html(legendHtm);
+       xRadarChart.series_data = data.map(function(i, j){return i.data});  
+       xRadarChart.show_data = $.extend(true, [], xRadarChart.series_data);
+        
+	   xRadarChart.chartTool.draw(xRadarChart.id, xRadarChart.show_data, xRadarChart.opt);
+	},
+	selectSeries: function(index, btn){
+        jeremy = btn;
+		xRadarChart.names[index].select = !xRadarChart.names[index].select;
+		if(xRadarChart.names[index].select){
+			$(btn).find("div").css("background-color", xRadarChart.opt.color(index));
+			xRadarChart.show_data[index] =$.extend(true, [], xRadarChart.series_data[index]);
+		}else {
+			var dataInSeries = xRadarChart.show_data[index];
+			for(var i=0; i < dataInSeries.length; i++){
+				dataInSeries[i].value = 0;
+			}
+			$(btn).find("div").css("background-color","transparent");
+		}
+		xRadarChart.chartTool.draw(xRadarChart.id, xRadarChart.show_data, xRadarChart.opt);
+	}
+}
