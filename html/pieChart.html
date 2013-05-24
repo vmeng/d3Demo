@@ -13,137 +13,188 @@ text {
 
 .mypiechart {
   width: 500px;
+  height: 300px;
   border: 2px;
 }
+	 .chartSize{
+		width: 140px;
+ 		height: 160px;
+	}
+</style>
 </style>
 
 	</head>
 	<body>
 		<h1> Pie Chart </h1><br/>
 		<h2>Test1</h2>
-<svg id="test1" class="mypiechart"></svg>
-
+<div id="resolving_chartnode" class="chartSize" style="background-color: gray"><svg ></svg></div>
+<div class="span" style="margin-left:15px;">
+                <div id="legend_customer_interactions"><svg></svg></div>
+            </div>
 <h2>Test2</h2>
 <svg id="test2" class="mypiechart"></svg>
 
-<script src="../js/lib/d3.v2.js"></script>
+<div style='float:left'>
+Code: <br/>
+<textarea id="chartValue" style="height:300;width: 300">[
+   
+]</textarea>
+
+<div>change code and redraw</div>
+
+<button onclick="redraw()">Redraw</button>
+<script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="../js/nv.d3.js"></script>
-<script src="../js/nvd3/models/legend.js"></script>
-<script src="../js/nvd3/models/pie.js"></script>
-<script src="../js/nvd3/models/pieChart.js"></script>
-<script src="../js/nvd3/utils.js"></script>
 <script src="../js/pwcColors.js"></script>
 <script>
-
-  var testdata = [
+  var resolving_chartData = [
     {
-      key: "One",
-      y: 5
+      legend: "I do it my self",
+      y: 122
     },
     {
-      key: "Two",
-      y: 2
+      legend: "I get help from a company representative",
+      y: 445
     },
     {
-      key: "Three",
-      y: 9
+      legend: "This is not  something I typically do",
+      y: 30
     },
     {
-      key: "Four",
-      y: 7
-    },
-    {
-      key: "Five",
-      y: 4
-    },
-    {
-      key: "Six",
-      y: 3
-    },
-    {
-      key: "Seven",
-      y: .5
-    },
-    {
-      key: "Seven",
-      y: .5
-    },{
-      key: "Seven",
-      y: .5
-    }
-    ,{
-      key: "Seven",
-      y: .5
-    },
-    {
-      key: "Seven",
-      y: .5
-    },
-    {
-      key: "Seven",
-      y: .5
+      legend: "I get help from other customers or experts",
+      y: 113
     }
   ];
+var resolving_chart;
+	nv.addGraph(function() {
+		
+	    resolving_chart = nv.models.pieChart()
+	        .x(function(d) { return d.legend })
+	        .y(function(d) { return d.y })
+	        .showLabels(false)
+	        .values(function(d) { return d })
+	        .color(d3.scale.category20().range())
+	        .showLegend(false)
+	        .margin({
+                       top : -10,
+                       right : 0,
+                       bottom : 0,
+                       left : 0
+            })
+         	.tooltipContent(function(key, y, e, graph) {
+       			 // return '<h3>' + key + '</h3>' +
+               		// '<p>' +  y + '</p>'
+               	
+               		return '<h4 style="color:black">' + key + '</h4><p style="color:#606060">' + Math.round( y/caculateTotal(resolving_chartData)*100) + "%</p>";
+      		});
+	
+	      d3.select("#resolving_chartnode svg")
+	          .datum([resolving_chartData])
+	        .transition().duration(1200)
+       		.call(resolving_chart); 
+	
+	    resolving_chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
 
+    return resolving_chart;
+	});
 
-nv.addGraph(function() {
-    var width = 500,
-        height = 500;
+	nv.addGraph(function() {
+		
+	    var customer_interactions_legend = nv.models.legend()
+	    	.key(function(d) { return d.legend })
+	        
+	        .color(d3.scale.category20().range())
+	        
+	
+	      d3.select("#legend_customer_interactions svg")
+	          .datum(resolving_chartData)
+	        .transition().duration(1200)
+       		.call(customer_interactions_legend); 
+	
+	    resolving_chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
 
-    var chart = nv.models.pieChart()
-        .x(function(d) { return d.key })
-        .y(function(d) { return d.y })
-        //.showLabels(false)
-        .values(function(d) { return d })
-        .color(d3.scale.pwcColors().range())
-        .width(width)
-        .height(height);
+    return customer_interactions_legend;
+	});
+// nv.addGraph(function() {
+// 
+   // var chart = nv.models.pieChart()
+        // .x(function(d) { return d.legend })
+        // .y(function(d) { return d.y })
+        // .showLabels(false)
+        // .values(function(d) { return d })
+        // .color(d3.scale.pwcColors().range())
+        // .showLegend(false)
+        // .margin({
+                       // top : -10,
+                       // right : 0,
+                       // bottom : 0,
+                       // left : 0
+             // });
+//         
+// 
+      // d3.select("#resolving_chartnode svg")
+          // .datum([testdata])
+        // .transition().duration(1200)
+          // .call(chart);
+// 
+    // chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
+// 
+    // return chart;
+// });
 
-      d3.select("#test1")
-          .datum([testdata])
-        .transition().duration(1200)
-          .attr('width', width)
-          .attr('height', height)
-          .call(chart);
+// nv.addGraph(function() {
+// 
+    // var width = 500,
+        // height = 500;
+// 
+    // var chart = nv.models.pieChart()
+        // .x(function(d) { return d.key })
+        // //.y(function(d) { return d.value })
+        // .values(function(d) { return d })
+        // //.labelThreshold(.08)
+        // //.showLabels(false)
+        // .color(d3.scale.pwcColors().range())
+        // .width(width)
+        // .height(height)
+        // .donut(false);
+// 
+    // chart.pie
+        // .startAngle(function(d) { return d.startAngle/2 -Math.PI/2 })
+        // .endAngle(function(d) { return d.endAngle/2 -Math.PI/2 });
+// 
+      // //chart.pie.donutLabelsOutside(true).donut(true);
+// 
+      // d3.select("#test2")
+          // //.datum(historicalBarChart)
+          // .datum([testdata])
+        // .transition().duration(1200)
+          // .attr('width', width)
+          // .attr('height', height)
+          // .call(chart);
+// 
+    // return chart;
+// });
 
-    chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
-
-    return chart;
-});
-
-nv.addGraph(function() {
-
-    var width = 500,
-        height = 500;
-
-    var chart = nv.models.pieChart()
-        .x(function(d) { return d.key })
-        //.y(function(d) { return d.value })
-        .values(function(d) { return d })
-        //.labelThreshold(.08)
-        //.showLabels(false)
-        .color(d3.scale.pwcColors().range())
-        .width(width)
-        .height(height)
-        .donut(true);
-
-    chart.pie
-        .startAngle(function(d) { return d.startAngle/2 -Math.PI/2 })
-        .endAngle(function(d) { return d.endAngle/2 -Math.PI/2 });
-
-      //chart.pie.donutLabelsOutside(true).donut(true);
-
-      d3.select("#test2")
-          //.datum(historicalBarChart)
-          .datum([testdata])
-        .transition().duration(1200)
-          .attr('width', width)
-          .attr('height', height)
-          .call(chart);
-
-    return chart;
-});
-
+function caculateTotal(arr){
+	var t = 0;
+	arr.map(function(one){
+		t+=one.y;
+	});
+	return t;
+	
+	
+}
 </script>
+<script>
+// var text = document.getElementById('chartValue').innerHTML;
+// alert(text);	
+function redraw () {
+  // var dd = eval(d3.select("#chartValue").text());
+  var dd = eval(document.getElementById('chartValue').value);
+  d3.select("#test2").datum([dd]).call(chart);
+ 
+}		
+
+    </script>
 	</body>
 </html>
