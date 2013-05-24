@@ -4,6 +4,7 @@
      		 body{font-family: sans-serif}
       	</style>
       	<script src="http://d3js.org/d3.v3.min.js"></script>
+      	<script src="../js/jquery.js"></script>
 		<script src="../js/radar/radar-chart.js"></script>
 	</head>
 	<body>
@@ -11,11 +12,14 @@
 		<h1> Spider </h1><br/>
 		
 		<div id="chart" style='float:left'></div>
+		<div id="chart2" style='float:left'>
+
+		</div>
 <div style='float:left'>
 Code: <br/>
 <textarea id="chartValue" style="height:300;width: 300">[
      [
-           {axis: "strength", value: 13}, 
+           {axis: "strength", value: 9}, 
            {axis: "intelligence", value: 1}, 
            {axis: "charisma", value: 8},  
            {axis: "dexterity", value: 4},  
@@ -35,10 +39,36 @@ Code: <br/>
      ]
 ];</textarea>
 
+<textarea id="chartValue2" style="height:300;width: 300">[
+			{name: "Tom",
+			data:
+			[
+			{axis: "strength", value: 13},
+			{axis: "intelligence", value: 1},
+			{axis: "charisma", value: 8},
+			{axis: "dexterity", value: 4},
+			{axis: "luck", value: 9}
+			]}
+			,	{name: "Nick",
+			data:[
+			{axis: "strength", value: 3},
+			{axis: "intelligence", value: 15},
+			{axis: "charisma", value: 4},
+			{axis: "dexterity", value: 1},
+			{axis: "luck", value: 15}
+			]},{name: "Jack",
+			data: [
+			{axis: "strength", value: 5},
+			{axis: "intelligence", value: 1},
+			{axis: "charisma", value: 16},
+			{axis: "dexterity", value: 10},
+			{axis: "luck", value: 5}
+			]}
+			];</textarea>
 <div>change code and redraw</div>
 
 <button onclick="redraw()">Redraw</button>
-
+<button onclick="redraw2()">Redraw2</button>
 <script>
 // var text = document.getElementById('chartValue').innerHTML;
 // alert(text);	
@@ -49,6 +79,19 @@ function redraw () {
 }		
 
 redraw();
+
+function redraw2 () {
+  // var dd = eval(d3.select("#chartValue").text());
+  d3.scale.pwcColor = function(index) {
+  	var myColors = ['#eeb592', '#dc6900', '#a32020','#d18f90','#f09892', '#602320'];
+    return myColors[index];
+};
+  var color = d3.scale.linear().domain([0,5]).range();
+  var dd = eval(document.getElementById('chartValue2').value);
+  xRadarChart.draw("#chart2",dd, {color: d3.scale.pwcColor});
+}		
+
+redraw2();
     </script>
 	</body>
 </html>
