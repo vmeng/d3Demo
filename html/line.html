@@ -1,0 +1,192 @@
+<html>
+	<head>
+		<link href="../js/nvd3/nv.d3.css" rel="stylesheet" type="text/css">
+		
+		<style>
+			body {
+  overflow-y:scroll;
+}
+
+text {
+  font: 12px sans-serif;
+}
+
+svg {
+  display: block;
+}
+
+		</style>
+	</head>
+	<body>
+		<h1> Line  </h1><br/>
+		
+		<div id="chart" style="width:400px; height:300px">
+   			 <svg></svg>
+  		</div>
+<textarea id="chartValue" style="height:300;width: 300">
+
+</textarea>
+<div>change code and redraw</div>
+
+<button onclick="redraw()">Redraw</button>
+<script src="http://d3js.org/d3.v2.min.js"></script>
+<script src="../js/nv.d3.js"></script>
+<script src="../js/nvd3/tooltip.js"></script>
+<script src="../js/nvd3/utils.js"></script>
+<script src="../js/nvd3/models/legend.js"></script>
+<script src="../js/nvd3/models/axis.js"></script>
+<script src="../js/nvd3/models/scatter.js"></script>
+<script src="../js/nvd3/models/line.js"></script>
+<script src="../js/nvd3/models/lineChart.js"></script>
+<script src="../js/pwcColors.js"></script>
+<script>
+var tickMarks = [2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011];
+
+var data = [{
+  'key': 'GB by year',
+  'values': [
+    {x: 2001, y: 0.12},
+    {x: 2004, y: 0.03},
+    {x: 2005, y: 0.53},
+    {x: 2006, y: 0.43},
+    {x: 2007, y: 5.5},
+    {x: 2008, y: 9.9},
+    {x: 2009, y: 26.85},
+    {x: 2010, y: 0.03},
+    {x: 2011, y: 0.12}
+  ]
+}];  
+var chart;
+nv.addGraph(function() {
+ chart = nv.models.lineChart().color(d3.scale.pwcColors().range())
+    // .forceX(2001,2011)
+    
+    chart.xAxis
+    .tickValues(tickMarks)
+    .tickFormat(function(d){ return d });
+
+	chart.yAxis
+    .tickFormat(d3.format(',f'));
+    
+    d3.select('#chart svg')
+    .datum(data)
+  .transition().duration(500).call(chart);
+});
+
+
+
+// nv.utils.windowResize(chart1.update);
+
+// var keyArray = ['1 week','1 month','6 month','1 year','2 years','5 years','+10 years'];
+// var valueArray = [20,15,10,8,5,3,0];
+// var testData = [keyArray, valueArray];
+// var getWeek = function(){
+	// var array = [];
+	// keyArray.map(function(d,i){
+		// var tmp = [d,valueArray[i]];
+// 		
+		// array.push(tmp);
+	// })
+	// return array;
+// }
+// var week = getWeek();
+// var data = [{
+  // 'key': 'GB by year',
+  // 'values': [
+    // {x: '1 week', y: 0.12},
+    // {x: '1 month', y: 0.03},
+    // {x: '6 month', y: 0.53},
+    // {x: '1 year', y: 0.43},
+    // {x: '2 years', y: 5.5},
+    // {x: '5 years', y: 9.9},
+    // {x: '+10 years', y: 26.85},
+  // ]
+// }]; 
+   // console.log(data);
+// var chart;
+// nv.addGraph(function() {
+      // var chart = nv.models.cumulativeLineChart()
+                    // .x(function(d) { return d.x })
+                    // .y(function(d) { return d.y }) 
+                    // .color(d3.scale.category10().range()).clipEdge(true)
+                    // ;
+//   
+       // // chart.xAxis
+          // // .tickFormat(function(d) {
+             // // return d3.time.format('%x')(new Date(d))
+           // // });
+           // chart.xAxis.tickValues(keyArray)
+    // .tickFormat(function(d){
+    	// console.log(d);
+    	 // return d 
+    	 // })
+//  
+     // chart.yAxis
+         // .tickFormat(d3.format(',.1%'));
+//  
+     // d3.select('#chart svg')
+         // .datum(data)
+       // .transition().duration(500)
+         // .call(chart);
+//  
+     // //TODO: Figure out a good way to do this automatically
+     // nv.utils.windowResize(chart.update);
+//  
+     // return chart;
+// });
+
+//***********************************/
+    // var chart;
+// 
+    // nv.addGraph(function () {
+          // chart = nv.models.cumulativeLineChart()
+                      // .x(function (d) { return d[0] })
+                      // .y(function (d) { return d[1] / 100 })
+                      // .color(d3.scale.category10().range());
+// 
+        // chart.xAxis
+            // .tickFormat(function (d) {
+                // return d3.time.format('%x')(new Date(d))
+            // });
+// 
+        // chart.yAxis
+            // .tickFormat(d3.format(',.1%'));
+// 
+        // d3.select('#chart svg')
+            // .datum(data)
+            // .transition().duration(500)
+            // .call(chart);
+// 
+        // nv.utils.windowResize(chart.update);
+// 
+        // return chart;
+    // });
+// 
+// 
+    // function redraw() {
+        // d3.select('#chart svg')
+            // .datum(data)
+          // .transition().duration(500)
+            // .call(chart);
+    // }
+// 
+    function getData() {
+        var arr = [];
+        var theDate = new Date(2012, 01, 01, 0, 0, 0, 0);
+        for (var x = 0; x < 30; x++) {
+            arr.push([theDate.getTime(), Math.random() * 10]);
+            theDate.setDate(theDate.getDate() + 1);
+        }
+        return arr;
+    }
+    // setInterval(function () {
+        // var long = data[0].values;
+        // var next = new Date(long[long.length - 1][0]);
+        // next.setMonth(next.getMonth() + 1)
+        // long.shift();
+        // long.push([next.getTime(), Math.random() * 100]);
+        // redraw();
+    // }, 1500);
+</script>
+	</body>
+</html>
