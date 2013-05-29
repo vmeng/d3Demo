@@ -1,0 +1,159 @@
+<html>
+	<head>
+		<link href="../js/nvd3/nv.d3.css" rel="stylesheet" type="text/css">
+<script src="../js/jquery.js"></script>
+<script src="d3.v3.js"  charset="utf-8"></script>
+<script src="nv.d3.js"></script>
+
+
+		<style>
+			body {
+  overflow-y:scroll;
+}
+
+text {
+  font: 12px sans-serif;
+}
+
+svg {
+  display: block;
+}
+#chart svg {
+  min-width: 100px;
+  min-height: 100px;
+ }
+		</style>
+	</head>
+	<body>
+		<h1>Test Line  </h1><br/>
+		
+		<div id="chart" style="width:431px; height:140px">
+   			 <svg></svg>
+  		</div>
+  		
+<button onclick="change()" style="width: 80px">change</button>
+
+
+<script>
+
+var keyArray = ['1 week','1 month','6 month','1 year','2 years','5 years','+10 years'];
+var segment_heather = [100,78.15126050420169,57.983193277310924,47.89915966386555,36.97478991596639,31.932773109243698,31.932773109243698];
+var segment_rachel = [100,70,43.07692307692307,33.07692307692307,24.615384615384613,22.307692307692307,22.307692307692307];
+var incomes_25 = [100,69.38775510204081,38.775510204081634,28.571428571428573,24.489795918367346,22.448979591836736,22.448979591836736];
+var incomes_35 = [100,67.0886075949367,48.10126582278481,34.177215189873415,24.050632911392405,21.51898734177215,21.51898734177215];
+var tick_marks_series = function(arr){
+	return keyArray.map(function(d,i){
+		return {x:i, y:arr[i]};
+	});
+}
+var rachel = tick_marks_series(segment_rachel);
+var heather = tick_marks_series(segment_heather);
+
+var segment = [
+{
+  key: "Heather",
+  values: heather
+},
+{
+  key: "Rachel",
+  values: rachel
+},
+
+]; 
+var incomes = [
+{
+key : "$25K-$35K",
+values: tick_marks_series(incomes_25)
+},
+{
+key : "$35K-$50K",
+values: tick_marks_series(incomes_35)
+}
+]
+
+console.log(segment);
+console.log(incomes);
+var margin = {top: 10, right: 30, bottom: 25, left: 35};
+nv.addGraph(function() {
+       chart = nv.models.lineChart()
+      	.y(function(d) { return (d.y)/100 })
+                    .color(d3.scale.category10().range())
+                    .margin(margin)
+                    // .showLegend(false)
+                    ;
+
+       chart.xAxis.tickValues([0,1,2,3,4,5,6])
+    		.tickFormat(function(d){ return keyArray[d] });
+ 
+	chart.yAxis.tickFormat(d3.format(',.0%'));
+	// chart.xAxis.rotateLabels(-45);
+ 	// chart.yAxis.tickFormat(function(d){if(d==1) return "100%"});
+ 
+
+     d3.select('#chart svg')
+         .datum(segment)
+       .transition().duration(500)
+         .call(chart);
+ 
+     nv.utils.windowResize(chart.update);
+ 
+     return chart;
+});
+var isIncome = false;
+function change(){
+	isIncome = !isIncome;
+	if(isIncome){
+		d3.select('#chart svg')
+         .datum(incomes)
+       .transition().duration(500)
+         .call(chart);
+	}else{
+		d3.select('#chart svg')
+         .datum(segment)
+       .transition().duration(500)
+         .call(chart);
+	}
+}
+//***********************************/
+// nv.addGraph(function() {
+// var chart = nv.models.lineChart()
+    // // .forceX(2001,2011);
+// 
+// var tickMarks = [2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011]
+// 
+// chart.xAxis
+    // .tickValues(tickMarks)
+    // .tickFormat(function(d){ return d });
+// 
+// chart.yAxis
+    // .tickFormat(d3.format(',.2f'));
+// 
+// var data = [{
+  // 'key': 'GB by year',
+  // 'values': [
+    // {x: 2001, y: 0.12},
+    // {x: 2004, y: 0.03},
+    // {x: 2005, y: 0.53},
+    // {x: 2006, y: 0.43},
+    // {x: 2007, y: 5.5},
+    // {x: 2008, y: 9.9},
+    // {x: 2009, y: 26.85},
+    // {x: 2010, y: 0.03},
+    // {x: 2011, y: 0.12}
+  // ]
+// }];        
+// 
+// d3.select('#chart svg')
+    // .datum(data)
+  // .transition().duration(500).call(chart);
+// })
+
+
+</script>
+<style>
+	.nvd3 .nv-axis.nv-x path.domain {
+		stroke-opacity: 1;
+	}
+</style>
+	</body>
+</html>
