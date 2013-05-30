@@ -90,9 +90,7 @@ nv.addGraph(function() {
 	// chart.yAxis.tickFormat(d3.format(',.0%'));
 	 
 	// chart.xAxis.rotateLabels(-45);
- 	chart.yAxis.tickFormat(function(d){
- 		return (d==0)?"0" : d*100+'%';
- 		});
+ 	chart.yAxis.tickFormat(function(d){return (d==0)?"0" : (d*100).toFixed(0)+'%';});
  
 
      d3.select('#chart svg')
