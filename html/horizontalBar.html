@@ -24,7 +24,8 @@ text {
 }
 
 #chart1 svg {
-  height: 500px;
+  height: 300px;
+  width: 500px;
 }
 
 </style>
@@ -53,26 +54,6 @@ text {
       { 
         "label" : "Group D" ,
         "value" : 2.4174010336624
-      } , 
-      {
-        "label" : "Group E" ,
-        "value" : 0.72009071426284
-      } , 
-      { 
-        "label" : "Group F" ,
-        "value" : 0.77154485523777
-      } , 
-      { 
-        "label" : "Group G" ,
-        "value" : 0.90152097798131
-      } , 
-      {
-        "label" : "Group H" ,
-        "value" : 0.91445417330854
-      } , 
-      { 
-        "label" : "Group I" ,
-        "value" : 0.055746319141851
       }
     ]
   },
@@ -95,27 +76,7 @@ text {
       { 
         "label" : "Group D" ,
         "value" : 8.6142352811805
-      } , 
-      {
-        "label" : "Group E" ,
-        "value" : 7.8082472075876
-      } , 
-      { 
-        "label" : "Group F" ,
-        "value" : 5.259101026956
-      } , 
-      { 
-        "label" : "Group G" ,
-        "value" : 0.30947953487127
-      } , 
-      { 
-        "label" : "Group H" ,
-        "value" : 0
-      } , 
-      { 
-        "label" : "Group I" ,
-        "value" : 1 
-      }
+      } 
     ]
   },
   {
@@ -137,27 +98,7 @@ text {
       { 
         "label" : "Group D" ,
         "value" : 8.6142352811805
-      } , 
-      {
-        "label" : "Group E" ,
-        "value" : 7.8082472075876
-      } , 
-      { 
-        "label" : "Group F" ,
-        "value" : 5.259101026956
-      } , 
-      { 
-        "label" : "Group G" ,
-        "value" : 0.30947953487127
-      } , 
-      { 
-        "label" : "Group H" ,
-        "value" : 0
-      } , 
-      { 
-        "label" : "Group I" ,
-        "value" : 0 
-      }
+      } 
     ]
   }
 ]</textarea>
@@ -169,13 +110,6 @@ text {
 
 <script src="../js/lib/d3.v2.js"></script>
 <script src="../js/nv.d3.js"></script>
-<script src="../js/nvd3/tooltip.js"></script>
-<script src="../js/nvd3/utils.js"></script>
-<script src="../js/nvd3/models/legend.js"></script>
-<script src="../js/nvd3/models/axis.js"></script>
-<script src="../js/nvd3/models/multiBarHorizontal.js"></script>
-<script src="../js/nvd3/models/multiBarHorizontalChart.js"></script>
-<script src="../js/stream_layers.js"></script>
 <script src="../js/pwcColors.js"></script>
 
 <script>
@@ -188,13 +122,14 @@ nv.addGraph(function() {
       .x(function(d) { return d.label })
       .y(function(d) { return d.value })
       .margin({top: 30, right: 20, bottom: 50, left: 175})
-      //.showValues(true)
+      .showValues(true)
       //.tooltips(false)
       .barColor(d3.scale.pwcColors().range())
-      .showControls(true);
+      // .showControls(false)
+      .stacked(true);
 
   chart.yAxis
-      .tickFormat(d3.format(',.2f'));
+      .tickFormat(d3.format(',.0f'));
 
   d3.select('#chart1 svg')
       .datum(long_short_data)
@@ -220,7 +155,32 @@ function redraw () {
             
   
 }
+var foo = {
+    "a ab": true,
+    b: true,
+    z: true,
+    c: true
+}
 
+
+var _buildPurchaseDevicesData = function(series_data, index,legendLabel) {
+	var new_data = [];
+	console.log("===_buildPurchaseDevicesData===");
+	console.log(series_data);
+	for (var key in series_data) {
+		new_data.push({
+			"label" : key,
+			"value" : series_data[key]
+		})
+	}
+	return {
+		"key" : legendLabel,
+		"values" : new_data
+	};
+}
+
+var a = _buildPurchaseDevicesData(foo,0,"pppp");
+console.log(a);
 </script>
 
 
