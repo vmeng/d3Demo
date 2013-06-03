@@ -34,7 +34,8 @@ text {
 		<div id="chart1">
     		<svg></svg>
   		</div>
-  		<textarea id="chartValue" style="height:300;width: 300">[ 
+  		<textarea id="chartValue" style="height:300;width: 300">
+[ 
   {
     key: 'Series1',
     color: '#d62728',
@@ -113,9 +114,10 @@ text {
 <script src="../js/pwcColors.js"></script>
 
 <script>
+
 long_short_data = eval(document.getElementById('chartValue').value);
 
-
+var keyArray = ['Low','High'];
 var chart;
 nv.addGraph(function() {
   chart = nv.models.multiBarHorizontalChart()
@@ -126,11 +128,18 @@ nv.addGraph(function() {
       //.tooltips(false)
       .barColor(d3.scale.pwcColors().range())
       // .showControls(false)
+      .tooltipContent(function (key, x, y, e, graph) {
+      	
+       	 return '<h3>' + key + ' - ' + x + '</h3>' +
+               '<p>' +  y + ' = '+ d3.format(",.2f")(e.value) +'</p>'
+      })
       .stacked(true);
 
-  chart.yAxis
-      .tickFormat(d3.format(',.0f'));
-
+  // chart.yAxis.tickFormat(d3.format(',.0f'));
+      
+	chart.yAxis.tickValues([0,1]).tickFormat(function(d,i){return (d==0) ? 'Low': 'High'});
+	console.log("-------");
+    		console.log(chart.xAxis.ticks())
   d3.select('#chart1 svg')
       .datum(long_short_data)
     .transition().duration(500)
@@ -138,8 +147,8 @@ nv.addGraph(function() {
 
   nv.utils.windowResize(chart.update);
 
-  chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
-
+  // chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
+// console.log(chart.x().);
   return chart;
 });
 
@@ -155,32 +164,6 @@ function redraw () {
             
   
 }
-var foo = {
-    "a ab": true,
-    b: true,
-    z: true,
-    c: true
-}
-
-
-var _buildPurchaseDevicesData = function(series_data, index,legendLabel) {
-	var new_data = [];
-	console.log("===_buildPurchaseDevicesData===");
-	console.log(series_data);
-	for (var key in series_data) {
-		new_data.push({
-			"label" : key,
-			"value" : series_data[key]
-		})
-	}
-	return {
-		"key" : legendLabel,
-		"values" : new_data
-	};
-}
-
-var a = _buildPurchaseDevicesData(foo,0,"pppp");
-console.log(a);
 </script>
 
 

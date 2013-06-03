@@ -14,30 +14,31 @@ text {
 svg {
   display: block;
 }
-
+#chart svg {
+  min-width: 100px;
+  min-height: 100px;
+ }
 		</style>
 	</head>
 	<body>
 		<h1> Line  </h1><br/>
 		
-		<div id="chart" style="width:450px; height:300px">
+		<div id="chart" style="width:410px; height:140px">
    			 <svg></svg>
   		</div>
+  		<br/>
 <textarea id="chartValue" style="height:300;width: 300">
 
 </textarea>
 <div>change code and redraw</div>
 
 <button onclick="redraw()">Redraw</button>
-<script src="http://d3js.org/d3.v2.min.js"></script>
+<!-- <script src="http://d3js.org/d3.v2.min.js"></script> -->
+
+<script src="../js/jquery.js"></script>
+<script src="../js/lib/d3.v2.js"></script>
 <script src="../js/nv.d3.js"></script>
-<script src="../js/nvd3/tooltip.js"></script>
-<script src="../js/nvd3/utils.js"></script>
-<script src="../js/nvd3/models/legend.js"></script>
-<script src="../js/nvd3/models/axis.js"></script>
-<script src="../js/nvd3/models/scatter.js"></script>
-<script src="../js/nvd3/models/line.js"></script>
-<script src="../js/nvd3/models/lineChart.js"></script>
+
 <script src="../js/pwcColors.js"></script>
 <script>
 // var tickMarks = [2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011];
@@ -75,54 +76,83 @@ svg {
 
 
 
-// nv.utils.windowResize(chart1.update);
 
 var keyArray = ['1 week','1 month','6 month','1 year','2 years','5 years','+10 years'];
-var valueArray = [20,15,10,8,5,3,0];
-var getWeek = function(){
-	var array = [];
-	keyArray.map(function(d,i){
-		var tmp = {x:i, y:valueArray[i]}
-		
-		array.push(tmp);
-	})
-	return array;
+var valueArray = [100,78.15126050420169,57.983193277310924,47.89915966386555,36.97478991596639,31.932773109243698,31.932773109243698];
+var valueArray0 = [100,70,43.07692307692307,33.07692307692307,24.615384615384613,22.307692307692307,22.307692307692307];
+var tick_marks_series = function(arr){
+	return keyArray.map(function(d,i){
+		return {x:i, y:arr[i]};
+	});
 }
-var week = getWeek();
-var data = [{
-  'key': 'GB by year',
-  'values': [
+var rachel = tick_marks_series(valueArray0);
+var heather = tick_marks_series(valueArray);
+var testArray = [
     {x: 0, y: 0.12},
     {x: 1, y: 0.03},
-    {x: 2, y: 0.53},
+    {x: 2, y: 43.07692307692307},
     {x: 3, y: 0.43},
     {x: 4, y: 5.5},
     {x: 5, y: 9.9},
-    {x: 6, y: 19.9},
-  ]
+    {x: 6, y: 26.85}
+    ];
+    console.log(testArray);
+    console.log(rachel);
+var data = [
+{
+  key: "Heather",
+  values: heather
 },
 {
-  'key': 'viki year',
-  'values': week
-}]; 
-var chart;
+  key: "Rachel",
+  values: rachel
+},
+
+]; 
+var sincos = function() {
+   var sin = [],
+       cos = [];
+ 
+   for (var i = 0; i < 100; i++) {
+     sin.push({x: i, y: Math.sin(i/10)});
+     cos.push({x: i, y: .5 * Math.cos(i/10)});
+   }
+ 
+   return[
+    {
+      values: sin,
+       key: 'Sine Wave',
+     },
+     {
+       values: cos,
+       key: 'Cosine Wave',
+     }
+	];
+}
+var new_data = jQuery.extend(true, [], data);
+console.log(new_data);
+console.log(sincos());
+var margin = {top: 10, right: 30, bottom: 25, left: 35};
 nv.addGraph(function() {
-      var chart = nv.models.lineChart()
+       chart = nv.models.lineChart()
       	.y(function(d) { return (d.y)/100 })
                     .color(d3.scale.category10().range())
+                    .margin(margin)
+                    // .showLegend(false)
                     ;
-  
-       chart.xAxis
-       .tickValues([0,1,2,3,4,5,6])
-    .tickFormat(function(d){ 
-    	console.log(d);
-    	console.log(keyArray[d]); return keyArray[d] });
 
-	// chart.yAxis
-    // .tickFormat(d3.format(',.%'));
- 	chart.yAxis
-         .tickFormat(d3.format(',.0%'));
+       chart.xAxis.tickValues([0,1,2,3,4,5,6])
+    		.tickFormat(function(d){ return keyArray[d] });
  
+	chart.yAxis.tickFormat(d3.format(',.0%'));
+	// chart.xAxis.rotateLabels(-15);
+ 	// chart.yAxis.tickFormat(function(d){if(d==1) return "100%"});
+ 
+ // var x = d3.scale.ordinal().domain([0,1,2,3,4,5,6]);
+// chart.xAxis.scale(1);
+// 
+// chart.forceY(1);
+
      d3.select('#chart svg')
          .datum(data)
        .transition().duration(500)
@@ -168,15 +198,15 @@ nv.addGraph(function() {
             // .call(chart);
     // }
 // 
-    function getData() {
-        var arr = [];
-        var theDate = new Date(2012, 01, 01, 0, 0, 0, 0);
-        for (var x = 0; x < 30; x++) {
-            arr.push([theDate.getTime(), Math.random() * 10]);
-            theDate.setDate(theDate.getDate() + 1);
-        }
-        return arr;
-    }
+    // function getData() {
+        // var arr = [];
+        // var theDate = new Date(2012, 01, 01, 0, 0, 0, 0);
+        // for (var x = 0; x < 30; x++) {
+            // arr.push([theDate.getTime(), Math.random() * 10]);
+            // theDate.setDate(theDate.getDate() + 1);
+        // }
+        // return arr;
+    // }
     // setInterval(function () {
         // var long = data[0].values;
         // var next = new Date(long[long.length - 1][0]);
@@ -186,5 +216,10 @@ nv.addGraph(function() {
         // redraw();
     // }, 1500);
 </script>
+<style>
+	.nvd3 .nv-axis.nv-x path.domain {
+		stroke-opacity: 1;
+	}
+</style>
 	</body>
 </html>

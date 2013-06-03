@@ -23,59 +23,34 @@ svg {
 		<div id="chart1" style="width:400px; height:300px">
    			 <svg></svg>
   		</div>
-<textarea id="chartValue" style="height:300;width: 300">
-function sinAndCos() {
-  var sin = [],
-      cos = [];
+<textarea id="chartValue" style="height:120;width: 300">
 
   for (var i = 0; i < 100; i++) {
     sin.push({x: i, y: Math.sin(i/10) });
     cos.push({x: i, y: .5 * Math.cos(i/10)});
   }
-
-  return [
-    {
-      values: sin,
-      key: "Sine Wave",
-      color: "#ff7f0e"
-    },
-    {
-      values: cos,
-      key: "Cosine Wave",
-      color: "#2ca02c"
-    }
-  ];
-}
 </textarea>
 <div>change code and redraw</div>
 
 <button onclick="redraw()">Redraw</button>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="../js/nv.d3.js"></script>
-<script src="../js/nvd3/tooltip.js"></script>
-<script src="../js/nvd3/utils.js"></script>
-<script src="../js/nvd3/models/legend.js"></script>
-<script src="../js/nvd3/models/axis.js"></script>
-<script src="../js/nvd3/models/scatter.js"></script>
-<script src="../js/nvd3/models/line.js"></script>
-<script src="../js/nvd3/models/lineChart.js"></script>
 <script src="../js/pwcColors.js"></script>
 <script>
-var dateArray = ['one week','two week','three week','Ten years'];
+
 var chart;
 nv.addGraph(function() {
    chart = nv.models.lineChart();
-  var fitScreen = false;
-  var zoom = 1;
+  // var fitScreen = false;
+  // var zoom = 1;
 
 
-  chart.xAxis
-      .tickFormat(d3.format(',r'));
+  chart.xAxis.tickFormat(d3.format(',r'));
 
   chart.yAxis
       .axisLabel('Voltage (v)')
-      .tickFormat(d3.format(',.2f'));
-  // chart.color(pwcColors);
+      .tickFormat(d3.format(',.0f'));
+  chart.color(pwcColors);
   
   d3.select('#chart1 svg')
       .attr('perserveAspectRatio', 'xMinYMid')
@@ -85,10 +60,10 @@ nv.addGraph(function() {
 });
 
 
-
-function sinAndCos() {
-  var sin = [],
+var sin = [],
       cos = [];
+function sinAndCos() {
+  
 
   for (var i = 0; i < 100; i++) {
     sin.push({x: i, y: Math.sin(i/10) });
@@ -99,12 +74,10 @@ function sinAndCos() {
     {
       values: sin,
       key: "Sine Wave",
-      color: "#ff7f0e"
     },
     {
       values: cos,
       key: "Cosine Wave",
-      color: "#2ca02c"
     }
   ];
 }
@@ -125,11 +98,23 @@ function sinAndCos() {
 //             
 // }
 function redraw () {
+	sin =[], cos = [];
   var dd = eval(document.getElementById('chartValue').value);
+  var data = [
+    {
+      values: sin,
+      key: "Sine Wave",
+      color: "#ff7f0e"
+    },
+    {
+      values: cos,
+      key: "Cosine Wave",
+      color: "#2ca02c"
+    }
+  ];
   // alert(document.getElementById('chartValue').value);
-	console.log(sinAndCos());
   d3.select('#chart1 svg')
-            .datum(dd())
+            .datum(eval(data))
           .transition().duration(500)
             .call(chart);
 }

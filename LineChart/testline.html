@@ -5,7 +5,7 @@
 <script src="d3.v3.js"  charset="utf-8"></script>
 <!-- <script src="../js/lib/d3.v2.js"></script> -->
 <script src="nv.d3.js"></script>
-
+<script src="../js/pwcColors.js"></script>
 
 		<style>
 			body {
@@ -41,7 +41,7 @@ var keyArray = ['1 week','1 month','6 month','1 year','2 years','5 years','+10 y
 var segment_heather = [100,78.15126050420169,57.983193277310924,47.89915966386555,36.97478991596639,31.932773109243698,31.932773109243698];
 var segment_rachel = [100,70,43.07692307692307,33.07692307692307,24.615384615384613,22.307692307692307,22.307692307692307];
 var incomes_25 = [100,69.38775510204081,38.775510204081634,28.571428571428573,24.489795918367346,22.448979591836736,22.448979591836736];
-var incomes_35 = [100,67.0886075949367,48.10126582278481,34.177215189873415,24.050632911392405,21.51898734177215,21.51898734177215];
+var incomes_35 = [100,67.0886075949367,48.10126582278481,34.177215189873415,24.050632911392405,23.51898734177215,21.51898734177215];
 var tick_marks_series = function(arr){
 	return keyArray.map(function(d,i){
 		return {x:i, y:arr[i]};
@@ -58,8 +58,7 @@ var segment = [
 {
   key: "Rachel",
   values: rachel
-},
-
+}
 ]; 
 var incomes = [
 {
@@ -70,27 +69,29 @@ values: tick_marks_series(incomes_25)
 key : "$35K-$50K",
 values: tick_marks_series(incomes_35)
 }
-]
+];
 
 console.log(segment);
 console.log(incomes);
 var margin = {top: 10, right: 30, bottom: 25, left: 35};
 nv.addGraph(function() {
        chart = nv.models.lineChart()
-      	.y(function(d) { return (d.y)/100 })
-                    .color(d3.scale.category10().range())
-                    .margin(margin)
+      	.y(function(d) {  var t = (d.y/100).toFixed(5);return t })
+      	// .x(function(d) {return d.x})
+                    .color(d3.scale.pwcColors().range())
+                    // .margin(margin)
                     .forceY([0,1])
+                    .tooltips(false)
                     // .showLegend(false)
                     ;
 
        chart.xAxis.tickValues([0,1,2,3,4,5,6])
     		.tickFormat(function(d){ return keyArray[d] });
  
-	// chart.yAxis.tickFormat(d3.format(',.0%'));
+	// chart.yAxis.tickValues([0,1]).tickFormat(d3.format(',.0%'));
 	 
 	// chart.xAxis.rotateLabels(-45);
- 	chart.yAxis.tickFormat(function(d){return (d==0)?"0" : (d*100).toFixed(0)+'%';});
+ 	// chart.yAxis.tickFormat(function(d){return (d==0)?"0" : (d*100).toFixed(0)+'%';});
  
 
      d3.select('#chart svg')
@@ -98,7 +99,7 @@ nv.addGraph(function() {
        .transition().duration(500)
          .call(chart);
  
-     nv.utils.windowResize(chart.update);
+     // nv.utils.windowResize(chart.update);
  
      return chart;
 });
