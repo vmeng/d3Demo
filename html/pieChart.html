@@ -69,9 +69,10 @@ var resolving_chart;
 	nv.addGraph(function() {
 		
 	    resolving_chart = nv.models.pieChart()
-	        .x(function(d) { return d.legend })
+	        .x(function(d) { return (d.y/caculateTotal(resolving_chartData)).toFixed(2) *100 +'%' })
 	        .y(function(d) { return d.y })
-	        .showLabels(false)
+	        .showLabels(true)
+	        .pieLabelsOutside(false)
 	        .values(function(d) { return d })
 	        .color(d3.scale.category20().range())
 	        .showLegend(false)
