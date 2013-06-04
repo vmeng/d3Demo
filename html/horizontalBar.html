@@ -126,7 +126,7 @@ nv.addGraph(function() {
       .margin({top: 30, right: 20, bottom: 50, left: 175})
       .showValues(true)
       //.tooltips(false)
-      .barColor(d3.scale.pwcColors().range())
+      .color(d3.scale.pwcColors().range())
       // .showControls(false)
       .tooltipContent(function (key, x, y, e, graph) {
       	
@@ -135,11 +135,13 @@ nv.addGraph(function() {
       })
       .stacked(true);
 
+	//change legend
+	chart.legend.dispatch.on('legendClick', function(d,i) {});
+	
   // chart.yAxis.tickFormat(d3.format(',.0f'));
       
 	chart.yAxis.tickValues([0,1]).tickFormat(function(d,i){return (d==0) ? 'Low': 'High'});
-	console.log("-------");
-    		console.log(chart.xAxis.ticks())
+	
   d3.select('#chart1 svg')
       .datum(long_short_data)
     .transition().duration(500)
@@ -147,6 +149,7 @@ nv.addGraph(function() {
 
   nv.utils.windowResize(chart.update);
 
+	
   // chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
 // console.log(chart.x().);
   return chart;
@@ -167,6 +170,10 @@ function redraw () {
 </script>
 
 
-    
+    <style>
+    	.nvd3 .nv-legend .nv-series {
+    		cursor: default;
+    	}
+    </style>
 	</body>
 </html>
