@@ -1,0 +1,150 @@
+<html>
+	<head>
+		<link href="../js/nvd3/nv.d3.css" rel="stylesheet" type="text/css">
+		
+		<style>
+			body {
+  overflow-y:scroll;
+}
+
+text {
+  font: 12px sans-serif;
+}
+
+svg {
+  display: block;
+}
+
+		</style>
+	</head>
+	<body>
+		<h1> Scatter Chart </h1><br/>
+		
+		<div id="chart1" style="width:500px; height:400px">
+   			 <svg></svg>
+  		</div>
+<textarea id="chartValue" style="height:120;width: 300">
+
+  
+</textarea>
+<div>change code and redraw</div>
+
+<button onclick="redraw()">Redraw</button>
+<script src="http://d3js.org/d3.v2.min.js"></script>
+<script src="../js/nv.d3.js"></script>
+<script src="../js/pwcColors.js"></script>
+<script>
+
+var chart;
+nv.addGraph(function() {
+		var chart = nv.models.scatterChart().showDistX(true).showDistY(true)
+		.margin({top: 30, right: 30, bottom: 50, left: 85})
+		//.height(500)
+		.useVoronoi(true).color(d3.scale.category10().range());
+
+		chart.xAxis.tickValues([0,1,2,3,4]).tickFormat(function(d, i) {
+			return 'Product ' + d;
+		})
+
+		chart.yAxis.tickValues([0,1,2,3]).tickFormat(function(d, i) {
+			return 'Life Event ' + (d+1);
+		})
+
+		d3.select('#chart1 svg').datum(scadata(4, 5)).transition().duration(500).call(chart);
+		// nv.utils.windowResize(chart.update);
+
+		chart.dispatch.on('stateChange', function(e) {
+			nv.log('New State:', JSON.stringify(e));
+		});
+		chart3 = chart;
+		return chart;
+});
+
+
+function scadata(groups, points) {//# groups,# points per group
+	var data = [], shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
+	random = d3.random.normal();
+
+	for ( i = 0; i < groups; i++) {
+		data.push({
+			key : 'Life Event' + (i + 1),
+			values : []
+		});
+
+		for ( j = 0; j < points; j++) {
+			data[i].values.push({
+				//x : random(),
+				x : j + 1,
+				//y : random(),
+				y : i,
+				size : random(),
+				shape : shapes[j % 6]
+			});
+		}
+	}
+
+	return data;
+};
+function randomData(groups, points) { //# groups,# points per group
+   var data = [],
+       shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
+       random = d3.random.normal();
+ 
+   for (i = 0; i < groups; i++) {
+     data.push({
+       key: 'Group ' + i,
+       values: []
+     });
+ 
+     for (j = 0; j < points; j++) {
+       data[i].values.push({
+         x: random()
+       , y: random()
+       , size: Math.random()
+       //, shape: shapes[j % 6]
+       });
+     }
+   }
+ 
+   return data;
+}
+// 
+// function redraw () {
+  // // var dd = eval(d3.select("#chartValue").text());
+  // var dd = eval(document.getElementById('chartValue').value);
+  // // alert(document.getElementById('chartValue').value);
+  // // d3.select("#chart1 svg").empty();
+  // // d3.select('#chart1 svg')
+            // // .datum(dd)
+          // // .transition().duration(500)
+            // // .call(chart);
+     // d3.select('#chart1 svg')
+      // .datum(sinAndCos())
+      // .transition().duration(500)
+      // .call(chart);
+//             
+// }
+function redraw () {
+	sin =[], cos = [];
+  var dd = eval(document.getElementById('chartValue').value);
+  var data = [
+    {
+      values: sin,
+      key: "Sine Wave",
+      color: "#ff7f0e"
+    },
+    {
+      values: cos,
+      key: "Cosine Wave",
+      color: "#2ca02c"
+    }
+  ];
+  // alert(document.getElementById('chartValue').value);
+  d3.select('#chart1 svg')
+            .datum(eval(data))
+          .transition().duration(500)
+            .call(chart);
+}
+</script>
+	</body>
+</html>
